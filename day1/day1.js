@@ -1001,7 +1001,7 @@ input = [
   '449three45three'
 ];
 
-function main() {
+function puzzle1() {
   sum = 0;
   for (str of input) {
     twoDigits = '';
@@ -1024,7 +1024,7 @@ function main() {
 
     console.log(`${str} -----------> ${twoDigits}`);
     if (twoDigits.length != 2) {
-      throw 'didn\'t get a two digit number!!!!!';
+      throw new Error('didn\'t get a two digit number!!!!!');
     }
     sum += parseInt(twoDigits);
   }
@@ -1033,4 +1033,101 @@ function main() {
   return;
 }
 
-main();
+function puzzle2() {
+  sum = 0;
+  for (str of input) {
+    // first digit, start from beginning of string
+    let firstDigitIndex = null;
+    let firstDigitValue;
+    for (digitMap of eStringDigits) {
+      const [key, value] = Object.entries(digitMap)[0];
+      const indexOfStringValue = str.indexOf(key);
+      if (indexOfStringValue != -1) {
+        if (firstDigitIndex == null) {
+          firstDigitIndex = indexOfStringValue;
+          firstDigitValue = value;
+        } else {
+          if (indexOfStringValue < firstDigitIndex) {
+            firstDigitIndex = indexOfStringValue;
+            firstDigitValue = value;
+          }
+        }
+      }
+
+      const indexOfDigitValue = str.indexOf(value);
+      if (indexOfDigitValue != -1) {
+        if (firstDigitIndex == null) {
+          firstDigitIndex = indexOfDigitValue;
+          firstDigitValue = value;
+        } else {
+          if (indexOfDigitValue < firstDigitIndex) {
+            firstDigitIndex = indexOfDigitValue;
+            firstDigitValue = value;
+          }
+        }
+      }
+    }
+    if (firstDigitIndex == null) {
+      throw new Error('firstDigitIndex is null :(');
+    }
+
+    // second digit, start from end of string
+    let lastDigitIndex = null;
+    let lastDigitValue;
+    for (digitMap of eStringDigits) {
+      const [key, value] = Object.entries(digitMap)[0];
+      const indexOfStringValue = str.lastIndexOf(key);
+      if (indexOfStringValue != -1) {
+        if (lastDigitIndex == null) {
+          lastDigitIndex = indexOfStringValue;
+          lastDigitValue = value;
+        } else {
+          if (indexOfStringValue > lastDigitIndex) {
+            lastDigitIndex = indexOfStringValue;
+            lastDigitValue = value;
+          }
+        }
+      }
+
+      const indexOfDigitValue = str.lastIndexOf(value);
+      if (indexOfDigitValue != -1) {
+        if (lastDigitIndex == null) {
+          lastDigitIndex = indexOfDigitValue;
+          lastDigitValue = value;
+        } else {
+          if (indexOfDigitValue > lastDigitIndex) {
+            lastDigitIndex = indexOfDigitValue;
+            lastDigitValue = value;
+          }
+        }
+      }
+    }
+    if (lastDigitIndex == null) {
+      throw new Error('lastDigitIndex is null :(');
+    }
+
+    const twoDigits = `${firstDigitValue}${lastDigitValue}`;
+    console.log(`${str} -----------> ${twoDigits}`);
+    if (twoDigits.length != 2) {
+      throw new Error('didn\'t get a two digit number!!!!!');
+    }
+    sum += parseInt(twoDigits);
+  }
+
+  console.log(sum);
+  return;
+}
+
+const eStringDigits = [
+  { 'one': '1' },
+  { 'two': '2' },
+  { 'three': '3' },
+  { 'four': '4' },
+  { 'five': '5' },
+  { 'six': '6' },
+  { 'seven': '7' },
+  { 'eight': '8' },
+  { 'nine': '9' },
+];
+
+puzzle2();
