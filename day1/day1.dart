@@ -1001,7 +1001,7 @@ List<String> input = [
   '449three45three'
 ];
 
-void main() {
+void puzzle1() {
   int sum = 0;
   for (String str in input) {
     String twoDigits = '';
@@ -1033,4 +1033,57 @@ void main() {
   return;
 }
 
-// answer: 53921
+// answer to puzzle 1: 53921
+
+void puzzle2() {
+  int sum = 0;
+  for (String str in input) {
+    String twoDigits = '';
+
+    // first digit, start from beginning of string
+    for (String char in str.split('')) {
+      if (int.tryParse(char) != null) {
+        twoDigits += char;
+        break;
+      }
+    }
+
+    // second digit, start from end of string
+    for (String char in str.split('').reversed) {
+      if (int.tryParse(char) != null) {
+        twoDigits += char;
+        break;
+      }
+    }
+
+    print('$str -----------> $twoDigits');
+    if (twoDigits.length != 2) {
+      throw Exception('didn\'t get a two digit number!!!!!');
+    }
+    sum += int.parse(twoDigits);
+  }
+
+  print(sum);
+  return;
+}
+
+enum EStringDigits {
+  one('one', 1),
+  two('two', 2),
+  three('three', 3),
+  four('four', 4),
+  five('five', 5),
+  six('six', 6),
+  seven('seven', 7),
+  eight('eight', 8),
+  nine('nine', 9);
+
+  final String stringValue;
+  final int numericValue;
+  const EStringDigits(this.stringValue, this.numericValue);
+}
+
+void main() {
+  puzzle1();
+  return;
+}
