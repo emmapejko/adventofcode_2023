@@ -1038,24 +1038,75 @@ void puzzle1() {
 void puzzle2() {
   int sum = 0;
   for (String str in input) {
-    String twoDigits = '';
-
     // first digit, start from beginning of string
-    for (String char in str.split('')) {
-      if (int.tryParse(char) != null) {
-        twoDigits += char;
-        break;
+    int? firstDigitIndex;
+    String? firstDigitValue;
+    for (EStringDigits digit in EStringDigits.values) {
+      int indexOfStringValue = str.indexOf(digit.lettersValue);
+      if (indexOfStringValue != -1) {
+        if (firstDigitIndex == null) {
+          firstDigitIndex = indexOfStringValue;
+          firstDigitValue = digit.digitValue;
+        } else {
+          if (indexOfStringValue < firstDigitIndex) {
+            firstDigitIndex = indexOfStringValue;
+            firstDigitValue = digit.digitValue;
+          }
+        }
       }
+
+      int indexOfDigitValue = str.indexOf(digit.digitValue);
+      if (indexOfDigitValue != -1) {
+        if (firstDigitIndex == null) {
+          firstDigitIndex = indexOfDigitValue;
+          firstDigitValue = digit.digitValue;
+        } else {
+          if (indexOfDigitValue < firstDigitIndex) {
+            firstDigitIndex = indexOfDigitValue;
+            firstDigitValue = digit.digitValue;
+          }
+        }
+      }
+    }
+    if (firstDigitIndex == null) {
+      throw Exception('firstDigitIndex is null :(');
     }
 
     // second digit, start from end of string
-    for (String char in str.split('').reversed) {
-      if (int.tryParse(char) != null) {
-        twoDigits += char;
-        break;
+    int? lastDigitIndex;
+    String? lastDigitValue;
+    for (EStringDigits digit in EStringDigits.values) {
+      int indexOfStringValue = str.lastIndexOf(digit.lettersValue);
+      if (indexOfStringValue != -1) {
+        if (lastDigitIndex == null) {
+          lastDigitIndex = indexOfStringValue;
+          lastDigitValue = digit.digitValue;
+        } else {
+          if (indexOfStringValue > lastDigitIndex) {
+            lastDigitIndex = indexOfStringValue;
+            lastDigitValue = digit.digitValue;
+          }
+        }
+      }
+
+      int indexOfDigitValue = str.lastIndexOf(digit.digitValue);
+      if (indexOfDigitValue != -1) {
+        if (lastDigitIndex == null) {
+          lastDigitIndex = indexOfDigitValue;
+          lastDigitValue = digit.digitValue;
+        } else {
+          if (indexOfDigitValue > lastDigitIndex) {
+            lastDigitIndex = indexOfDigitValue;
+            lastDigitValue = digit.digitValue;
+          }
+        }
       }
     }
+    if (lastDigitIndex == null) {
+      throw Exception('lastDigitIndex is null :(');
+    }
 
+    String twoDigits = '$firstDigitValue$lastDigitValue';
     print('$str -----------> $twoDigits');
     if (twoDigits.length != 2) {
       throw Exception('didn\'t get a two digit number!!!!!');
@@ -1068,22 +1119,24 @@ void puzzle2() {
 }
 
 enum EStringDigits {
-  one('one', 1),
-  two('two', 2),
-  three('three', 3),
-  four('four', 4),
-  five('five', 5),
-  six('six', 6),
-  seven('seven', 7),
-  eight('eight', 8),
-  nine('nine', 9);
+  one('one', '1'),
+  two('two', '2'),
+  three('three', '3'),
+  four('four', '4'),
+  five('five', '5'),
+  six('six', '6'),
+  seven('seven', '7'),
+  eight('eight', '8'),
+  nine('nine', '9');
 
-  final String stringValue;
-  final int numericValue;
-  const EStringDigits(this.stringValue, this.numericValue);
+  final String lettersValue;
+  final String digitValue;
+  const EStringDigits(this.lettersValue, this.digitValue);
 }
 
+// answer to puzzle 2: 54676
+
 void main() {
-  puzzle1();
+  puzzle2();
   return;
 }
