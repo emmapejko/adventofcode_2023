@@ -677,6 +677,56 @@ function day2Puzzle1(): void {
     return;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function getGamePower(game: any): number {
+    const [key, value] = game;
+    let fewestRed: number | null = null;
+    let fewestGreen: number | null = null;
+    let fewestBlue: number | null = null;
+
+    for (const round of value) {
+        for (const cubesRevealed of round) {
+            const cubesHint = cubesRevealed.split(' ');
+            const cubeAmount = parseInt(cubesHint[0]);
+            const color = cubesHint[1];
+
+            switch (color) {
+                case 'red':
+                    if (fewestRed === null || cubeAmount > fewestRed) {
+                        fewestRed = cubeAmount;
+                    }
+                    break;
+                case 'green':
+                    if (fewestGreen === null || cubeAmount > fewestGreen) {
+                        fewestGreen = cubeAmount;
+                    }
+                    break;
+                case 'blue':
+                    if (fewestBlue === null || cubeAmount > fewestBlue) {
+                        fewestBlue = cubeAmount;
+                    }
+                    break;
+                default:
+                    throw new Error("color isn't red green or blue :(");
+            }
+        }
+    }
+    console.log(
+        `${key} ---> fewest red: ${fewestRed}, fewest green: ${fewestGreen}, fewest blue: ${fewestBlue}`
+    );
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return fewestRed! * fewestGreen! * fewestBlue!;
+}
+
+function day2Puzzle2(): void {
+    let sum = 0;
+    for (const game of Object.entries(day2Input)) {
+        sum += getGamePower(game);
+    }
+    console.log(sum);
+    return;
+}
+
 function day2Main(puzzleNum: number): void {
     if (puzzleNum === 1) {
         day2Puzzle1();
@@ -684,10 +734,10 @@ function day2Main(puzzleNum: number): void {
     }
 
     if (puzzleNum === 2) {
-        // puzzle2();
+        day2Puzzle2();
         return;
     }
     return;
 }
 
-day2Main(1);
+day2Main(2);
