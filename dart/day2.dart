@@ -687,7 +687,53 @@ void puzzle1() {
 
 // puzzle 1 answer: 2528
 
+int getGamePower(MapEntry<int, List<List<String>>> game) {
+  int? fewestRed = null;
+  int? fewestGreen = null;
+  int? fewestBlue = null;
+
+  for (List<String> round in game.value) {
+    for (String cubesRevealed in round) {
+      List<String> cubesHint = cubesRevealed.split(' ');
+      int cubeAmount = int.parse(cubesHint.first);
+      String color = cubesHint.last;
+
+      switch (color) {
+        case 'red':
+          if (fewestRed == null || cubeAmount > fewestRed) {
+            fewestRed = cubeAmount;
+          }
+          break;
+        case 'green':
+          if (fewestGreen == null || cubeAmount > fewestGreen) {
+            fewestGreen = cubeAmount;
+          }
+          break;
+        case 'blue':
+          if (fewestBlue == null || cubeAmount > fewestBlue) {
+            fewestBlue = cubeAmount;
+          }
+          break;
+        default:
+          throw Exception('color isn\'t red green or blue :(');
+      }
+    }
+  }
+  print(
+      '${game.key} ---> fewest red: $fewestRed, fewest green: $fewestGreen, fewest blue: $fewestBlue');
+  return fewestRed! * fewestGreen! * fewestBlue!;
+}
+
+void puzzle2() {
+  int sum = input.entries
+      .fold(0, (previousValue, game) => previousValue + getGamePower(game));
+  print(sum);
+  return;
+}
+
+// puzzle 2 answer:
+
 void main() {
-  puzzle1();
+  puzzle2();
   return;
 }
